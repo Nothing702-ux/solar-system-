@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Temu Solar System</title>
+  <style>
+    :root { --space: #030611; --text: #eef5ff; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; min-height: 100vh; overflow: hidden; color: var(--text);
+      font-family: system-ui, sans-serif; background: radial-gradient(circle at 50% 45%, #172754 0, var(--space) 52%);
+    }
+    body::before, body::after { content: ''; position: fixed; inset: 0; pointer-events: none; }
+    body::before {
+      opacity: .8;
+      background-image: radial-gradient(circle, #fff 0 1px, transparent 1.5px), radial-gradient(circle, #8fbaff 0 1px, transparent 1.5px);
+      background-size: 97px 113px, 173px 149px;
+      background-position: 12px 24px, 61px 8px;
+    }
+    body::after {
+      opacity: .45;
+      background: radial-gradient(ellipse at 20% 35%, transparent 0 28%, #7254b522 38%, transparent 58%), radial-gradient(ellipse at 82% 70%, transparent 0 30%, #3d72b522 42%, transparent 62%);
+      transform: rotate(-18deg) scale(1.25);
+    }
+    header { position: fixed; z-index: 2; top: 0; width: 100%; padding: 28px; text-align: center; }
+    h1 { margin: 0; font-size: clamp(1.8rem, 4vw, 3.5rem); letter-spacing: .12em; text-transform: uppercase; }
+    header p { margin: 8px 0; color: #9fb5d8; }
+    .space { position: relative; width: min(94vw, 1100px); height: min(90vh, 760px); margin: 8vh auto 0; }
+    .sun { position: absolute; z-index: 1; top: 50%; left: 50%; width: 82px; height: 82px; transform: translate(-50%,-50%); border-radius: 50%; background: #ffd34e; box-shadow: 0 0 25px #ffb300, 0 0 75px #ff7b00; cursor: pointer; }
+    .sun:focus-visible { outline: 2px solid #fff; outline-offset: 4px; }
+    .orbit { position: absolute; top: 50%; left: 50%; border: 1px solid #ffffff25; border-radius: 50%; transform: translate(-50%,-50%); }
+    .planet { position: absolute; top: 50%; left: 50%; border-radius: 50%; transform-origin: center; animation: orbit linear infinite; }
+    .planet { cursor: pointer; }
+    .planet:focus-visible, .moon:focus-visible { outline: 2px solid #fff; outline-offset: 4px; }
+    .planet::after { content: attr(data-name); position: absolute; top: 100%; left: 50%; transform: translateX(-50%); margin-top: 7px; color: #b9c9e6; font-size: 11px; white-space: nowrap; }
+    .moon { position: absolute; top: 50%; left: 50%; width: 5px; height: 5px; margin: -2.5px; border-radius: 50%; background: #dce6f2; box-shadow: 0 0 5px #fff; animation: moon-orbit 3s linear infinite; }
+    .moon::after { content: ''; position: absolute; inset: -5px; border: 1px solid #ffffff30; border-radius: 50%; }
+    .jupiter .moon { width: 4px; height: 4px; margin: -2px; animation-duration: 2.4s; }
+    .saturn .moon { animation-duration: 4s; }
+    .earth .moon { animation-duration: 2s; }
+    .mercury { width: 9px; height: 9px; background: #a99d91; box-shadow: 0 0 4px #777; animation-duration: 6s; }
+    .venus { width: 16px; height: 16px; background: #d7a85c; animation-duration: 10s; }
+    .earth { width: 18px; height: 18px; background: linear-gradient(135deg,#438de0 55%,#58b36e 56%); animation-duration: 14s; }
+    .mars { width: 13px; height: 13px; background: #c85d42; animation-duration: 18s; }
+    .jupiter { width: 38px; height: 38px; background: repeating-linear-gradient(#d9b68b 0 5px,#a97a5c 6px 9px); animation-duration: 25s; }
+    .saturn { width: 31px; height: 31px; background: #d2b77d; animation-duration: 32s; }
+    .saturn::before { content: ''; position: absolute; inset: 9px -14px; border: 3px solid #b99b6d; border-radius: 50%; transform: rotate(-18deg); }
+    .uranus { width: 23px; height: 23px; background: #8dd5d7; animation-duration: 40s; }
+    .neptune { width: 22px; height: 22px; background: #4775d1; animation-duration: 48s; }
+    .o1 { width: 130px; height: 130px; } .o2 { width: 190px; height: 190px; } .o3 { width: 260px; height: 260px; } .o4 { width: 330px; height: 330px; }
+    .o5 { width: 440px; height: 440px; } .o6 { width: 550px; height: 550px; } .o7 { width: 670px; height: 670px; } .o8 { width: 790px; height: 790px; }
+    @keyframes orbit { from { transform: rotate(0deg) translateX(var(--distance)) rotate(0deg); } to { transform: rotate(360deg) translateX(var(--distance)) rotate(-360deg); } }
+    @keyframes moon-orbit { from { transform: rotate(0deg) translateX(18px); } to { transform: rotate(360deg) translateX(18px); } }
+    .mercury { --distance: 65px; } .venus { --distance: 95px; } .earth { --distance: 130px; } .mars { --distance: 165px; }
+    .jupiter { --distance: 220px; } .saturn { --distance: 275px; } .uranus { --distance: 335px; } .neptune { --distance: 395px; }
+    @media (max-width: 700px) { .space { transform: scale(.58); margin-top: 5vh; } header { padding: 18px 10px; } }
+    .info-panel { position: fixed; z-index: 5; top: 50%; left: 50%; width: min(90vw, 390px); padding: 24px; color: var(--text); background: #0b1530ee; border: 1px solid #7fa8e866; border-radius: 16px; box-shadow: 0 18px 60px #000b; transform: translate(-50%, -50%) scale(.9); opacity: 0; pointer-events: none; transition: .2s ease; }
+    .info-panel.open { transform: translate(-50%, -50%) scale(1); opacity: 1; pointer-events: auto; }
+    .info-panel h2 { margin: 0 35px 10px 0; color: #ffd34e; }
+    .info-panel p { margin: 8px 0; line-height: 1.5; color: #c7d7f2; }
+    .close-info { position: absolute; top: 10px; right: 14px; border: 0; color: #fff; background: transparent; font-size: 25px; cursor: pointer; }
+    .info-backdrop { position: fixed; z-index: 4; inset: 0; background: #0008; opacity: 0; pointer-events: none; transition: opacity .2s; }
+    .info-backdrop.open { opacity: 1; pointer-events: auto; }
+    .animation-controls { position: fixed; z-index: 3; right: 22px; bottom: 22px; display: flex; align-items: center; gap: 10px; padding: 10px 12px; color: #c7d7f2; background: #0b1530dd; border: 1px solid #7fa8e866; border-radius: 12px; }
+    .animation-controls button { border: 1px solid #7fa8e8; border-radius: 7px; padding: 6px 10px; color: #fff; background: #182b55; cursor: pointer; }
+    .animation-controls button:hover { background: #264477; }
+    @media (max-width: 700px) { .animation-controls { right: 10px; bottom: 10px; } }
+  </style>
+</head>
+<body>
+  <header><h1>Temu Solar System</h1><p>Explore the planets and discover fascinating facts about our cosmic neighborhood.</p></header>
+  <main class="space" aria-label="Animated model of the solar system">
+    <div class="sun" title="Sun" role="button" tabindex="0" aria-label="Show information about the Sun"></div>
+    <div class="orbit o1"></div><div class="orbit o2"></div><div class="orbit o3"></div><div class="orbit o4"></div>
+    <div class="orbit o5"></div><div class="orbit o6"></div><div class="orbit o7"></div><div class="orbit o8"></div>
+    <div class="planet mercury" data-name="Mercury"></div><div class="planet venus" data-name="Venus"></div>
+    <div class="planet earth" data-name="Earth"><span class="moon" title="Moon"></span></div><div class="planet mars" data-name="Mars"></div>
+    <div class="planet jupiter" data-name="Jupiter"><span class="moon"></span><span class="moon" style="--moon-angle:120deg"></span><span class="moon" style="--moon-angle:240deg"></span></div><div class="planet saturn" data-name="Saturn"><span class="moon"></span></div>
+    <div class="planet uranus" data-name="Uranus"><span class="moon" data-name="Moon"></span></div><div class="planet neptune" data-name="Neptune"><span class="moon" data-name="Moon"></span></div>
+  </main>
+  <div class="animation-controls" aria-label="Animation controls">
+    <span id="animationTime">Moving: 0s</span>
+    <button id="pauseAnimation" type="button">Pause</button>
+    <button id="stopAnimation" type="button">Stop</button>
+  </div>
+  <div class="info-backdrop" id="infoBackdrop"></div>
+  <aside class="info-panel" id="infoPanel" role="dialog" aria-modal="true" aria-labelledby="infoTitle">
+    <button class="close-info" id="closeInfo" aria-label="Close information">&times;</button>
+    <h2 id="infoTitle"></h2><div id="infoText"></div>
+  </aside>
+  <script>
+    const facts = {
+      Sun: ['The star at the center of our Solar System and its main source of light and heat.', 'Age: About 4.6 billion years · Type: G-type main-sequence star', 'The Sun is mostly hydrogen and helium and contains over 99% of the Solar System’s mass.', 'Its energy is produced by nuclear fusion in its extremely hot core.'],
+      Mercury: ['The smallest planet and the closest to the Sun.', 'Year: 88 Earth days · Moons: 0 · Rocky world', 'Temperatures range from about −173°C at night to 427°C during the day.', 'Mercury has a large iron core and a very thin exosphere.'],
+      Venus: ['A hot, cloud-covered world with a thick carbon-dioxide atmosphere.', 'Year: 225 Earth days · Moons: 0 · Hottest planet', 'It rotates backward and has a day longer than its year.', 'Its surface pressure is about 90 times greater than Earth’s.'],
+      Earth: ['Our home planet, covered by oceans and the only known world with life.', 'Year: 365 days · Moons: 1 · Has liquid surface water', 'Its atmosphere is mostly nitrogen and oxygen and protects life from harmful radiation.', 'Earth is the only planet known to have active plate tectonics.'],
+      Mars: ['The red planet, marked by iron-rich dust and giant volcanoes.', 'Year: 687 Earth days · Moons: 2 · Home of Olympus Mons', 'Evidence shows that liquid water once flowed across its surface.', 'Mars has seasons, polar ice caps, and a day only slightly longer than Earth’s.'],
+      Jupiter: ['The largest planet, famous for its Great Red Spot storm.', 'Year: 11.86 Earth years · Moons: 95 · Gas giant', 'Its powerful magnetic field is the strongest of any planet in the Solar System.', 'Jupiter’s rapid rotation gives it a day lasting less than 10 hours.'],
+      Saturn: ['A gas giant surrounded by a spectacular system of icy rings.', 'Year: 29.45 Earth years · Moons: 146 · Least dense planet', 'Its rings are made mostly of ice, rock, and dust particles.', 'Saturn is so light for its size that it could float in water.'],
+      Uranus: ['An ice giant that rotates on its side and has faint rings.', 'Year: 84 Earth years · Moons: 28 · Blue-green methane atmosphere', 'Its extreme axial tilt causes seasons that last roughly 21 Earth years.', 'Uranus was the first planet discovered with a telescope.'],
+      Neptune: ['The farthest major planet, with powerful winds and deep blue clouds.', 'Year: 164.8 Earth years · Moons: 16 · Ice giant', 'It has the fastest winds in the Solar System, reaching over 2,000 km/h.', 'Neptune was mathematically predicted before it was observed in 1846.'],
+      Moon: ['Earth’s natural satellite, shaped by impact craters and ancient maria.', 'Orbit: 27.3 days · Diameter: 3,474 km · No substantial atmosphere', 'Its gravity drives most of Earth’s ocean tides and helps stabilize Earth’s tilt.', 'The Moon is moving away from Earth by about 3.8 centimeters each year.']
+    };
+    const panel = document.getElementById('infoPanel'), backdrop = document.getElementById('infoBackdrop');
+    function showInfo(name) { document.getElementById('infoTitle').textContent = name; document.getElementById('infoText').innerHTML = facts[name].map(fact => `<p>${fact}</p>`).join(''); panel.classList.add('open'); backdrop.classList.add('open'); }
+    function closeInfo() { panel.classList.remove('open'); backdrop.classList.remove('open'); }
+    const sun = document.querySelector('.sun');
+    sun.addEventListener('click', () => showInfo('Sun'));
+    sun.addEventListener('keydown', event => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); showInfo('Sun'); } });
+    document.querySelectorAll('.planet').forEach(planet => planet.addEventListener('click', event => { if (!event.target.classList.contains('moon')) showInfo(planet.dataset.name); }));
+    document.querySelectorAll('.moon').forEach(moon => { moon.tabIndex = 0; moon.addEventListener('click', event => { event.stopPropagation(); showInfo('Moon'); }); moon.addEventListener('keydown', event => { if (event.key === 'Enter' || event.key === ' ') showInfo('Moon'); }); });
+    document.getElementById('closeInfo').addEventListener('click', closeInfo); backdrop.addEventListener('click', closeInfo);
+    document.addEventListener('keydown', event => { if (event.key === 'Escape') closeInfo(); });
+
+    const movingObjects = document.querySelectorAll('.planet, .moon'), timeLabel = document.getElementById('animationTime');
+    const pauseButton = document.getElementById('pauseAnimation'), stopButton = document.getElementById('stopAnimation');
+    let elapsed = 0, timer = setInterval(() => { elapsed++; timeLabel.textContent = `Moving: ${elapsed}s`; }, 1000);
+    pauseButton.addEventListener('click', () => {
+      const paused = document.body.classList.toggle('animation-paused');
+      movingObjects.forEach(object => object.style.animationPlayState = paused ? 'paused' : 'running');
+      pauseButton.textContent = paused ? 'Resume' : 'Pause';
+      timeLabel.textContent = `${paused ? 'Stopped' : 'Moving'}: ${elapsed}s`;
+    });
+    stopButton.addEventListener('click', () => {
+      movingObjects.forEach(object => { object.style.animationPlayState = 'paused'; object.style.animationDelay = '0s'; });
+      clearInterval(timer); timeLabel.textContent = `Stopped: ${elapsed}s`; pauseButton.textContent = 'Resume';
+    });
+  </script>
+</body>
+</html>
